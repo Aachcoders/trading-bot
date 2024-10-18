@@ -1,0 +1,76 @@
+# bot/utils.py
+
+import logging
+
+# Set up logging configuration
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', 
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+def log_message(update):
+    """
+    Log incoming Telegram messages for debugging or tracking.
+    
+    Args:
+        update: Update object representing an incoming Telegram message.
+    """
+    user = update.message.from_user
+    logger.info(f"Received message from {user.username} (ID: {user.id}): {update.message.text}")
+
+def error(update, context):
+    """
+    Log any errors that occur during bot execution.
+    
+    Args:
+        update: Update object representing an incoming Telegram update (can be None).
+        context: Context object representing the current conversation context or state.
+    """
+    logger.error(f"An error occurred: {context.error}")
+    
+def log_order_action(user_id, token, amount, order_type):
+    """
+    Log the details of an order action.
+    
+    Args:
+        user_id: The Telegram user ID placing the order.
+        token: The token symbol being traded (e.g., BTC, ETH).
+        amount: The amount of the token being traded.
+        order_type: Type of order (buy, sell, limit, DCA, etc.).
+    """
+    logger.info(f"Order placed by User {user_id}: {order_type} {amount} {token}")
+
+def validate_user_input(input_text):
+    """
+    Validate user input to ensure it follows expected formats or conditions.
+    
+    Args:
+        input_text: The text input from the user.
+
+    Returns:
+        bool: True if the input is valid, False otherwise.
+    """
+    if input_text is None or len(input_text.strip()) == 0:
+        return False
+    # Add additional validation as needed (e.g., regex for price or amount)
+    return True
+
+def rate_limit_message(update):
+    """
+    Send a message to the user informing them they've hit the rate limit.
+    
+    Args:
+        update: Update object representing the Telegram message.
+    """
+    update.message.reply_text("You are sending messages too quickly. Please wait a moment before trying again.")
+
+def success_message(update, message):
+    """
+    Send a success message to the user after a successful operation.
+
+    Args:
+        update: Update object representing the Telegram message.
+        message: Custom success message to send.
+    """
+    update.message.reply_text(f"✅ Success! {message}")
