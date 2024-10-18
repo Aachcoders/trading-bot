@@ -8,7 +8,7 @@ from bot.eth_sol_bridge import swap_eth_to_sol, swap_sol_to_eth
 from bot.pump_fun import trade_pump_fun_token
 
 def main():
-    updater = Updater('432436789:AAG9DXdWe4kPDdM3W3S7dcQYa_VoCf7AYvo')
+    updater = Updater('7432436789:AAG9DXdWe4kPDdM3W3S7dcQYa_VoCf7AYvo')
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
