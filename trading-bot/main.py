@@ -53,7 +53,7 @@ def button(update: Update, context: CallbackContext) -> None:
 def main():
     """Initialize the bot with friendly message flows."""
     # Create Updater and Dispatcher
-    updater = Updater('YOUR_BOT_TOKEN', use_context=True)
+    updater = Updater('7432436789:AAG9DXdWe4kPDdM3W3S7dcQYa_VoCf7AYvo', use_context=True)
     dp = updater.dispatcher
 
     # Command handlers for user interaction
