@@ -1,5 +1,3 @@
-# bot/utils.py
-
 import logging
 
 # Set up logging configuration
@@ -27,8 +25,12 @@ def error(update, context):
         update: Update object representing an incoming Telegram update (can be None).
         context: Context object representing the current conversation context or state.
     """
-    logger.error(f"An error occurred: {context.error}")
-    
+    if update:
+        user_id = update.message.from_user.id
+        logger.error(f"An error occurred from User {user_id}: {context.error}")
+    else:
+        logger.error(f"An error occurred: {context.error} (No update info available)")
+
 def log_order_action(user_id, token, amount, order_type):
     """
     Log the details of an order action.
@@ -51,9 +53,9 @@ def validate_user_input(input_text):
     Returns:
         bool: True if the input is valid, False otherwise.
     """
-    if input_text is None or len(input_text.strip()) == 0:
+    if not input_text or not input_text.strip():
         return False
-    # Add additional validation as needed (e.g., regex for price or amount)
+    # Additional validation can be added here (e.g., regex for price or amount)
     return True
 
 def rate_limit_message(update):
@@ -74,3 +76,33 @@ def success_message(update, message):
         message: Custom success message to send.
     """
     update.message.reply_text(f"✅ Success! {message}")
+
+def validate_amount(amount):
+    """
+    Validate if the provided amount is a positive number.
+    
+    Args:
+        amount: The amount to validate.
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+    try:
+        return float(amount) > 0
+    except ValueError:
+        return False
+
+def validate_price(price):
+    """
+    Validate if the provided price is a positive number.
+    
+    Args:
+        price: The price to validate.
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+    try:
+        return float(price) > 0
+    except ValueError:
+        return False
