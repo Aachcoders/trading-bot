@@ -7,8 +7,9 @@ from bot.copy_trading import copy_trade
 from bot.eth_sol_bridge import swap_eth_to_sol, swap_sol_to_eth
 from bot.pump_fun import trade_pump_fun_token
 
-# Main menu
+# Main menu display
 def start(update, context):
+    """Send a welcome message with options to the user."""
     keyboard = [
         [InlineKeyboardButton("Register", callback_data='register')],
         [InlineKeyboardButton("Buy Order", callback_data='buy')],
@@ -22,11 +23,13 @@ def start(update, context):
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text('Welcome to Trojan Trading Bot! Please select an option:', reply_markup=reply_markup)
 
-# Handle button clicks
+# Handle button clicks and route to appropriate functions
 def button(update, context):
+    """Handle button click events from the InlineKeyboard."""
     query = update.callback_query
     query.answer()
 
+    # Routing based on the callback data
     if query.data == 'register':
         register(update, context)
     elif query.data == 'buy':
@@ -43,19 +46,28 @@ def button(update, context):
         swap_sol_to_eth(update, context)
     elif query.data == 'pumptrade':
         trade_pump_fun_token(update, context)
+    else:
+        query.message.reply_text("Invalid selection. Please choose a valid option.")
 
 def main():
-    updater = Updater('YOUR_BOT_TOKEN')
+    """Start the Telegram bot and handle commands."""
+    # Create an Updater object with the bot token
+    updater = Updater('7432436789:AAG9DXdWe4kPDdM3W3S7dcQYa_VoCf7AYvo', use_context=True)
+
+    # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CallbackQueryHandler(button))
-    dp.add_error_handler(error)
+    # Register command and callback query handlers
+    dp.add_handler(CommandHandler("start", start))  # Start command handler
+    dp.add_handler(CallbackQueryHandler(button))    # Inline button handler
+    dp.add_error_handler(error)                      # Error handler
 
+    # Initialize the database
     init_db()
 
+    # Start polling for updates from Telegram
     updater.start_polling()
-    updater.idle()
+    updater.idle()  # Block until the bot is stopped
 
 if __name__ == "__main__":
     main()
